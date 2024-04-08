@@ -26,6 +26,7 @@ if [ $# -eq 0 ]; then
       "BuildLoopDev.sh"
       "BuildxDrip4iOS.sh"
       "BuildGlucoseDirect.sh"
+      "BuildOpen-iAPS.sh"
       "Build_iAPS.sh"
       "CleanProfiles.sh"
       "CleanDerived.sh"
