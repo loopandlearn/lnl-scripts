@@ -13,7 +13,7 @@ DEV_TEAM_SETTING_NAME="DEVELOPER_TEAM"
 # sub modules are required
 CLONE_SUB_MODULES="1"
 
-# leave this code here, might not use it
+# leave this code here, not in use now
 FLAG_USE_SHA=0  # Initialize FLAG_USE_SHA to 0
 FIXED_SHA=""    # Initialize FIXED_SHA with an empty string
 
@@ -47,8 +47,6 @@ function select_oi_dev() {
 }
 
 function select_oi_special_branch() {
-    #FLAG_USE_SHA=1
-    #FIXED_SHA="f404fc4"
     branch_select ${URL_THIS_SCRIPT} ${special_branch_name} Open-iAPS_${special_branch_name}
 }
 
