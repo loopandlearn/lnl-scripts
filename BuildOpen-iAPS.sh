@@ -839,7 +839,7 @@ open_source_warning
 
 URL_THIS_SCRIPT="https://github.com/nightscout/Open-iAPS.git"
 
-special_branch_name="current-oref+submodules"
+special_branch_name="alpha"
 
 function select_oi_main() {
     branch_select ${URL_THIS_SCRIPT} main
