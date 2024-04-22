@@ -22,6 +22,7 @@ if [ $# -eq 0 ]; then
       "BuildLoopFollow.sh"
       "BuildLoopCaregiver.sh"
       "CustomizationSelect.sh"
+      "OiCustomizationSelect.sh"
       "BuildFreeAPS.sh"
       "BuildLoopDev.sh"
       "BuildxDrip4iOS.sh"
