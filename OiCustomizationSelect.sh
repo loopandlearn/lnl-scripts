@@ -659,9 +659,10 @@ message_incompatible_count=0
 # this is always used - it is the introductory message - it can be blank
 # it comes before any customizations are presented
 function message_generic() {
-    echo "  Needs to be updated"
     echo "  These Customizations are documented on the Loop and Learn web site"
     echo "        https://www.loopandlearn.org/custom-code/#custom-list"
+    echo
+    echo "  The script displays the subset valid for Open-iAPS"
     echo
 }
 
