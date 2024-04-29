@@ -752,78 +752,6 @@ function branch_select() {
 # *** End of inlined file: inline_functions/build_functions.sh ***
 
 
-# *** Start of inlined file: inline_functions/utility_scripts.sh ***
-function utility_scripts {
-    section_separator
-    echo -e "${INFO_FONT}These utility scripts automate several cleanup actions${NC}"
-    echo -e ""
-    echo -e " 1. Delete Old Downloads:"
-    echo -e "     This will keep the most recent download for each build type"
-    echo -e "     It asks before deleting any folders"
-    echo -e " 2. Clean Derived Data:"
-    echo -e "     Free space on your disk from old Xcode builds."
-    echo -e "     You should quit Xcode before running this script."
-    echo -e " 3. Xcode Cleanup (The Big One):"
-    echo -e "     Clears more disk space filled up by using Xcode."
-    echo -e "     * Use after uninstalling Xcode prior to new installation"
-    echo -e "     * It can free up a substantial amount of disk space"
-    echo -e " 4. Clean Profiles:"
-    echo -e "     Deletes any provisioning profiles on your Mac"
-    echo -e "     * Next time you build, Xcode will generate a new one"
-    echo -e "     * Ensures the next app you build with Xcode will last a year"
-    section_divider
-
-    options=(
-        "Delete Old Downloads"
-        "Clean Derived Data"
-        "Xcode Cleanup"
-        "Clean Profiles"
-        "Return to Menu"
-    )
-    actions=(
-        "run_script 'DeleteOldDownloads.sh'"
-        "run_script 'CleanDerived.sh'"
-        "run_script 'XcodeClean.sh'"
-        "run_script 'CleanProfiles.sh'"
-        return
-    )
-    menu_select "${options[@]}" "${actions[@]}"
-    return_when_ready
-}
-# *** End of inlined file: inline_functions/utility_scripts.sh ***
-
-
-# *** Start of inlined file: inline_functions/run_script.sh ***
-# The function fetches and executes a script either from LnL GitHub repository
-# or from the current local directory (if LOCAL_SCRIPT is set to "1").
-# The script is executed with "_" as parameter $0, telling the script that it is
-# run from within the ecosystem of LnL.
-# run_script accepts two parameters:
-#   1. script_name: The name of the script to be executed.
-#   2. extra_arg (optional): An additional argument to be passed to the script.
-# If the script fails to execute, the function prints an error message and terminates
-# the entire shell script with a non-zero status code.
-run_script() {
-    local script_name=$1
-    local extra_arg=$2
-    echo -e "\n--------------------------------\n"
-    echo -e "Executing Script: $script_name"
-    echo -e "\n--------------------------------\n"
-
-    if [[ ${LOCAL_SCRIPT:-0} -eq 0 ]]; then
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/loopandlearn/lnl-scripts/$SCRIPT_BRANCH/$script_name)" _ "$extra_arg"
-    else
-        /bin/bash -c "$(cat $script_name)" _ "$extra_arg"
-    fi
-
-    if [ $? -ne 0 ]; then
-        echo "Error: Failed to execute $script_name"
-        exit 1
-    fi
-}
-# *** End of inlined file: inline_functions/run_script.sh ***
-
-
 ############################################################
 # The rest of this is specific to the particular script
 ############################################################
@@ -847,36 +775,22 @@ function select_oi_dev() {
     branch_select ${URL_THIS_SCRIPT} dev
 }
 
-function customize() {
-    run_script "OiCustomizationSelect.sh"
-}
-
 if [ -z "$CUSTOM_BRANCH" ]; then
     while [ -z "$BRANCH" ]; do
         section_separator
         echo -e "\n ${INFO_FONT}You are running the script to build Open-iAPS,${NC}"
-        echo -e " ${INFO_FONT}run maintenance utilities or customize Open-iAPS${NC}"
         echo -e ""
         echo -e "To build Open-iAPS, you will select which branch:"
         echo -e "   most people should choose main branch"
         echo -e ""
-        echo -e "To customize, you must have previously downloaded Open-iAPS"
-        echo -e ""
         echo -e "  Documentation for Open-iAPS:"
         echo -e "    http://openiapsdocs.org"
-        echo -e "  Documentation for maintenance utilities:"
-        echo -e "    https://www.loopandlearn.org/build-select/#utilities-disk"
-        echo -e "  Documentation for customization (only a subset are used for Open-iAPS):"
-        echo -e "    https://www.loopandlearn.org/custom-code"
         echo -e ""
-        return_when_ready
-        section_divider
         echo -e "Before you continue, please ensure"
         echo -e "  you have Xcode and Xcode command line tools installed\n"
 
-
-        options=("Open-iAPS main" "Open-iAPS dev" "Run Maintenance Utilities" "Customize Open-iAPS" "$(exit_or_return_menu)")
-        actions=("select_oi_main" "select_oi_dev" "utility_scripts" "customize" "exit_script")
+        options=("Open-iAPS main" "Open-iAPS dev" "$(exit_or_return_menu)")
+        actions=("select_oi_main" "select_oi_dev" "exit_script")
         menu_select "${options[@]}" "${actions[@]}"
     done
 else

@@ -18,8 +18,6 @@ FLAG_USE_SHA=0  # Initialize FLAG_USE_SHA to 0
 FIXED_SHA=""    # Initialize FIXED_SHA with an empty string
 
 #!inline build_functions.sh
-#!inline utility_scripts.sh
-#!inline run_script.sh
 
 ############################################################
 # The rest of this is specific to the particular script
@@ -44,36 +42,22 @@ function select_oi_dev() {
     branch_select ${URL_THIS_SCRIPT} dev
 }
 
-function customize() {
-    run_script "OiCustomizationSelect.sh"
-}
-
 if [ -z "$CUSTOM_BRANCH" ]; then
     while [ -z "$BRANCH" ]; do
         section_separator
         echo -e "\n ${INFO_FONT}You are running the script to build Open-iAPS,${NC}"
-        echo -e " ${INFO_FONT}run maintenance utilities or customize Open-iAPS${NC}"
         echo -e ""
         echo -e "To build Open-iAPS, you will select which branch:"
         echo -e "   most people should choose main branch"
         echo -e ""
-        echo -e "To customize, you must have previously downloaded Open-iAPS"
-        echo -e ""
         echo -e "  Documentation for Open-iAPS:"
         echo -e "    http://openiapsdocs.org"
-        echo -e "  Documentation for maintenance utilities:"
-        echo -e "    https://www.loopandlearn.org/build-select/#utilities-disk"
-        echo -e "  Documentation for customization (only a subset are used for Open-iAPS):"
-        echo -e "    https://www.loopandlearn.org/custom-code"
         echo -e ""
-        return_when_ready
-        section_divider
         echo -e "Before you continue, please ensure"
         echo -e "  you have Xcode and Xcode command line tools installed\n"
 
-
-        options=("Open-iAPS main" "Open-iAPS dev" "Run Maintenance Utilities" "Customize Open-iAPS" "$(exit_or_return_menu)")
-        actions=("select_oi_main" "select_oi_dev" "utility_scripts" "customize" "exit_script")
+        options=("Open-iAPS main" "Open-iAPS dev" "$(exit_or_return_menu)")
+        actions=("select_oi_main" "select_oi_dev" "exit_script")
         menu_select "${options[@]}" "${actions[@]}"
     done
 else
