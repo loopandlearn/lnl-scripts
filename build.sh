@@ -22,17 +22,18 @@ if [ $# -eq 0 ]; then
       "BuildLoopFollow.sh"
       "BuildLoopCaregiver.sh"
       "CustomizationSelect.sh"
-      "OiCustomizationSelect.sh"
       "BuildFreeAPS.sh"
       "BuildLoopDev.sh"
       "BuildxDrip4iOS.sh"
       "BuildGlucoseDirect.sh"
-      "BuildOpen-iAPS.sh"
       "Build_iAPS.sh"
       "CleanProfiles.sh"
       "CleanDerived.sh"
       "DeleteOldDownloads.sh"
       "XcodeClean.sh"
+      "BuildOpen-iAPS.sh"
+      "OiBuildSelectScript.sh"
+      "OiCustomizationSelect.sh"
     )
 else
     # If arguments were provided, use them as the list of scripts
