@@ -316,7 +316,6 @@ function delete_old_downloads() {
         "Build_iAPS/iAPS_dev*"
         "BuildOpen-iAPS/Open-iAPS_main*"
         "BuildOpen-iAPS/Open-iAPS_dev*"
-        "BuildOpen-iAPS/Open-iAPS_alpha*"
     )
 
     list_build_folders_when_testing

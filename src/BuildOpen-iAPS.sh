@@ -36,8 +36,6 @@ open_source_warning
 
 URL_THIS_SCRIPT="https://github.com/nightscout/Open-iAPS.git"
 
-special_branch_name="alpha"
-
 function select_oi_main() {
     branch_select ${URL_THIS_SCRIPT} main
 }
@@ -46,29 +44,36 @@ function select_oi_dev() {
     branch_select ${URL_THIS_SCRIPT} dev
 }
 
-function select_oi_special_branch() {
-    branch_select ${URL_THIS_SCRIPT} ${special_branch_name} Open-iAPS_${special_branch_name}
+function customize() {
+    run_script "OiCustomizationSelect.sh"
 }
 
 if [ -z "$CUSTOM_BRANCH" ]; then
     while [ -z "$BRANCH" ]; do
         section_separator
-        echo -e "\n ${INFO_FONT}You are running the script to build Open-iAPS${NC}"
-        echo -e " ${INFO_FONT}  or run maintenance utilities${NC}"
+        echo -e "\n ${INFO_FONT}You are running the script to build Open-iAPS,${NC}"
+        echo -e " ${INFO_FONT}run maintenance utilities or customize Open-iAPS${NC}"
         echo -e ""
+        echo -e "To build Open-iAPS, you will select which branch:"
+        echo -e "   most people should choose main branch"
+        echo -e ""
+        echo -e "To customize, you must have previously downloaded Open-iAPS"
+        echo -e ""
+        echo -e "  Documentation for Open-iAPS:"
+        echo -e "    http://openiapsdocs.org"
+        echo -e "  Documentation for maintenance utilities:"
+        echo -e "    https://www.loopandlearn.org/build-select/#utilities-disk"
+        echo -e "  Documentation for customization (only a subset are used for Open-iAPS):"
+        echo -e "    https://www.loopandlearn.org/custom-code"
+        echo -e ""
+        return_when_ready
+        section_divider
         echo -e "Before you continue, please ensure"
         echo -e "  you have Xcode and Xcode command line tools installed\n"
-        echo -e "Please select which branch of Open-iAPS to download and build."
-        echo -e "Most people should choose main branch"
-        echo -e ""
-        echo -e "Documentation for iAPS:"
-        echo -e "  http://iapsdocs.org"
-        echo -e "Documentation for maintenance utilities:"
-        echo -e "  https://www.loopandlearn.org/build-select/#utilities-disk"
-        echo -e ""
 
-        options=("Open-iAPS main" "Open-iAPS dev" "Open-iAPS ${special_branch_name}" "Run Maintenance Utilities" "$(exit_or_return_menu)")
-        actions=("select_oi_main" "select_oi_dev" "select_oi_special_branch" "utility_scripts" "exit_script")
+
+        options=("Open-iAPS main" "Open-iAPS dev" "Run Maintenance Utilities" "Customize Open-iAPS" "$(exit_or_return_menu)")
+        actions=("select_oi_main" "select_oi_dev" "utility_scripts" "customize" "exit_script")
         menu_select "${options[@]}" "${actions[@]}"
     done
 else
