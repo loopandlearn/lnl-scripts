@@ -767,6 +767,8 @@ open_source_warning
 
 URL_THIS_SCRIPT="https://github.com/nightscout/Open-iAPS.git"
 
+special_branch_name="alpha"
+
 function select_oi_main() {
     branch_select ${URL_THIS_SCRIPT} main
 }
@@ -775,10 +777,14 @@ function select_oi_dev() {
     branch_select ${URL_THIS_SCRIPT} dev
 }
 
+function select_oi_special_branch() {
+    branch_select ${URL_THIS_SCRIPT} ${special_branch_name} Open-iAPS_${special_branch_name}
+}
+
 if [ -z "$CUSTOM_BRANCH" ]; then
     while [ -z "$BRANCH" ]; do
         section_separator
-        echo -e "\n ${INFO_FONT}You are running the script to build Open-iAPS,${NC}"
+        echo -e "\n ${INFO_FONT}You are running the script to build Open-iAPS${NC}"
         echo -e ""
         echo -e "To build Open-iAPS, you will select which branch:"
         echo -e "   most people should choose main branch"
@@ -789,8 +795,8 @@ if [ -z "$CUSTOM_BRANCH" ]; then
         echo -e "Before you continue, please ensure"
         echo -e "  you have Xcode and Xcode command line tools installed\n"
 
-        options=("Open-iAPS main" "Open-iAPS dev" "$(exit_or_return_menu)")
-        actions=("select_oi_main" "select_oi_dev" "exit_script")
+        options=("Open-iAPS main" "Open-iAPS dev" "Open-iAPS ${special_branch_name}" "$(exit_or_return_menu)")
+        actions=("select_oi_main" "select_oi_dev" "select_oi_special_branch" "exit_script")
         menu_select "${options[@]}" "${actions[@]}"
     done
 else
