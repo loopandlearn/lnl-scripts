@@ -332,8 +332,8 @@ while true; do
     options=(\
         "Build Open-iAPS" \
         "Build Related Apps" \
-        "Maintenance Utilities" \
-        "Customization Select" \
+        "Run Maintenance Utilities" \
+        "Customize Open-iAPS" \
         "Exit Script")
     actions=(\
         "WHICH=Open-iAPS" \
