@@ -54,7 +54,9 @@ if [ -z "$CUSTOM_BRANCH" ]; then
         echo -e "\n ${INFO_FONT}You are running the script to build Open-iAPS${NC}"
         echo -e ""
         echo -e "To build Open-iAPS, you will select which branch:"
-        echo -e "   most people should choose main branch"
+        #echo -e "   most people should choose main branch"
+        echo -e "   while private, dev (dependencies version) should not be used"
+        echo -e "                  alpha (submodule version) is under test"
         echo -e ""
         echo -e "  Documentation for Open-iAPS:"
         echo -e "    http://openiapsdocs.org"
@@ -62,8 +64,16 @@ if [ -z "$CUSTOM_BRANCH" ]; then
         echo -e "Before you continue, please ensure"
         echo -e "  you have Xcode and Xcode command line tools installed\n"
 
-        options=("Open-iAPS main" "Open-iAPS dev" "Open-iAPS ${special_branch_name}" "$(exit_or_return_menu)")
-        actions=("select_oi_main" "select_oi_dev" "select_oi_special_branch" "exit_script")
+        options=(\
+           # "Open-iAPS main" \
+            "Open-iAPS dev" \
+            "Open-iAPS ${special_branch_name}" \
+            "$(exit_or_return_menu)")
+        actions=(\
+           # "select_oi_main" \
+            "select_oi_dev" \
+            "select_oi_special_branch" \
+            "exit_script")
         menu_select "${options[@]}" "${actions[@]}"
     done
 else
