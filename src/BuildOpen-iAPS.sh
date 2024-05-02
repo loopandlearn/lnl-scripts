@@ -33,6 +33,7 @@ open_source_warning
 ############################################################
 
 URL_THIS_SCRIPT="https://github.com/nightscout/Open-iAPS.git"
+URL_FOR_DOCS="https://openiapsdocs.org/en/latest/"
 
 special_branch_name="alpha"
 
@@ -51,15 +52,18 @@ function select_oi_special_branch() {
 if [ -z "$CUSTOM_BRANCH" ]; then
     while [ -z "$BRANCH" ]; do
         section_separator
-        echo -e "\n ${INFO_FONT}You are running the script to build Open-iAPS${NC}"
+        echo -e "${INFO_FONT}You are running the script to build Open-iAPS${NC}"
         echo -e ""
-        echo -e "To build Open-iAPS, you will select which branch:"
+        echo -e "  ${INFO_FONT}WARNING: Beta Testers ONLY${NC}"
+        echo -e "    You should be a member of the discord server"
+        echo -e "      https://discord.gg/ptkk2Y264Z"
+        echo -e ""
+        #echo -e "To build Open-iAPS, you will select which branch:"
         #echo -e "   most people should choose main branch"
-        echo -e "   while private, dev (dependencies version) should not be used"
-        echo -e "                  alpha (submodule version) is under test"
+        echo -e "  During beta testing, use the dev branch"
         echo -e ""
         echo -e "  Documentation for Open-iAPS:"
-        echo -e "    http://openiapsdocs.org"
+        echo -e "    https://openiapsdocs.org/en/latest"
         echo -e ""
         echo -e "Before you continue, please ensure"
         echo -e "  you have Xcode and Xcode command line tools installed\n"
@@ -67,12 +71,12 @@ if [ -z "$CUSTOM_BRANCH" ]; then
         options=(\
            # "Open-iAPS main" \
             "Open-iAPS dev" \
-            "Open-iAPS ${special_branch_name}" \
+           # "Open-iAPS ${special_branch_name}" \
             "$(exit_or_return_menu)")
         actions=(\
            # "select_oi_main" \
             "select_oi_dev" \
-            "select_oi_special_branch" \
+           # "select_oi_special_branch" \
             "exit_script")
         menu_select "${options[@]}" "${actions[@]}"
     done
