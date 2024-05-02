@@ -312,7 +312,7 @@ function first_time_menu() {
     echo "  1 Download and Build Open-iAPS"
     echo "  2 Download and Build Related Apps"
     echo "  3 Run Maintenance Utilities"
-    echo "  4 Run Open-iAPS Customization Select"
+    echo "  4 Customize Open-iAPS"
     echo "  5 Exit Script"
     echo ""
     echo "After completing a given option, you can choose another or exit the script"
