@@ -56,7 +56,7 @@ if [ -z "$CUSTOM_BRANCH" ]; then
         echo -e ""
         echo -e "  ${INFO_FONT}WARNING: Beta Testers ONLY${NC}"
         echo -e "    You should be a member of the Open-iAPS discord server"
-        echo -e "      https://discord.gg/sUakC38m"
+        echo -e "      https://discord.gg/KepAG6RdYZ"
         echo -e ""
         #echo -e "To build Open-iAPS, you will select which branch:"
         #echo -e "   most people should choose main branch"
