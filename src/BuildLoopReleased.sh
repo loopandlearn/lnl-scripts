@@ -56,6 +56,7 @@ standard_build_train
 # temporary shell script to patch Xcode-16 problems
 echo -e "There are Xcode 16 issues that will be patched with the next few commands"
 echo -e "If you see an error it is possible that the released code has been update"
+cd $REPO_NAME
 script_name="xcode-16-fixes.sh"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/loopandlearn/lnl-scripts/$SCRIPT_BRANCH/$script_name)"
 return_when_ready
@@ -68,7 +69,7 @@ section_divider
 before_final_return_message
 echo -e ""
 return_when_ready
-cd $REPO_NAME
+# cd $REPO_NAME
 xed . 
 after_final_return_message
 exit_script
