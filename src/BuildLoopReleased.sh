@@ -53,6 +53,13 @@ fi
 
 standard_build_train
 
+# temporary shell script to patch Xcode-16 problems
+echo -e "There are Xcode 16 issues that will be patched with the next few commands"
+echo -e "If you see an error it is possible that the released code has been update"
+script_name="xcode-16-fixes.sh"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/loopandlearn/lnl-scripts/$SCRIPT_BRANCH/$script_name)"
+return_when_ready
+
 ############################################################
 # Open Xcode
 ############################################################
