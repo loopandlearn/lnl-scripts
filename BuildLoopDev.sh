@@ -867,12 +867,11 @@ check_config_override_existence_offer_to_configure
 ensure_a_year
 
 ############################################################
-# temporary shell script to patch Xcode-16 problems
+# temporary shell script to patch Xcode 16 problems
+# valid for Xcode 15 as well
 ############################################################
 
-echo -e "There are Xcode 16 issues that will be patched with the next few commands"
-echo -e "If you see an error it is possible that the released code has been updated"
-echo ""
+section_divider
 script_name="xcode-16-fixes.sh"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/loopandlearn/lnl-scripts/$SCRIPT_BRANCH/$script_name)"
 return_when_ready
