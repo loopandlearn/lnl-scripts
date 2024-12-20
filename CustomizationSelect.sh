@@ -711,8 +711,6 @@ function message_generic() {
     echo "  These Customizations are documented on the Loop and Learn web site"
     echo "        https://www.loopandlearn.org/custom-code/#custom-list"
     echo
-    echo "  New customizations are available with the release of Loop 3.4.x"
-    echo
 }
 
 # this is always used - it is the incompatible patches message - it can be blank
@@ -725,6 +723,12 @@ function message_incompatible() {
 # optional message to go with add_customization line
 function message_to_add_blank_line() {
     printf "\n"
+}
+
+# optional message to go with add_customization line
+function message_for_bundle_of_code_fixes() {
+    printf "        Apply these known fixes which are not yet in Loop 3.4.4\n"
+    printf "          https://www.loopandlearn.org/loop-features-in-development/#bundled-code-fixes\n\n"
 }
 
 # optional message to go with add_customization line
@@ -751,6 +755,8 @@ function message_for_live_activity() {
 #   User facing information for option
 #   Folder name in the patch repo
 #   (Optional) message function shown prior to option
+
+add_customization "Bundled Code Fixes" "bundled_code_fixes" "message_for_bundle_of_code_fixes"
 
 add_customization "Change Default to Upload Dexcom Readings" "dexcom_upload_readings"
 add_customization "Increase Future Carbs Limit to 4 hours" "future_carbs_4h"
