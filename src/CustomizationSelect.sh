@@ -64,6 +64,18 @@ function message_for_remote_window() {
     printf "          https://www.loopandlearn.org/loop-features-in-development#remote-window\n\n"
 }
 
+function message_for_ai_food() {
+    printf "       Preliminary customization for AI Foods, PR 2325\n"
+    printf "         Choose other desired customizations first;\n"
+    printf "           and then add this one last.\n"
+    printf "         Order is not independent for this customization with respect to:\n"
+    printf "           Profile Save & Load, Basal Lock and Live Activity\n"
+    printf "       Ignore messages about conflicts after this is appled:\n"
+    printf "         if a customization is already applied before this one,\n"
+    printf "         it remains in place after this one is added\n"
+    printf "          https://github.com/LoopKit/Loop/pull/2325\n\n"
+}
+
 # list patches in this order with args:
 #   User facing information for option
 #   Folder name in the patch repo
@@ -91,6 +103,8 @@ add_customization "Live Activity/Dynamic Island" "live_activity" "message_for_li
 add_customization "Negative Insulin Damper" "negative_insulin" "message_for_negative_insulin"
 
 add_customization "Increase Remote Window to 15 minutes" "remote_window" "message_for_remote_window"
+
+add_customization "Preliminary AI Food" "ai_food" "message_for_ai_food" "1"
 
 add_translation "2002" "profiles"
 
