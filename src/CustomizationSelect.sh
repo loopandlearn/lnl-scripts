@@ -64,8 +64,8 @@ function message_for_remote_window() {
     printf "          https://www.loopandlearn.org/loop-features-in-development#remote-window\n\n"
 }
 
-function message_for_ai_food() {
-    printf "       Preliminary customization for AI Foods, PR 2325\n"
+function message_for_food_search() {
+    printf "       Preliminary customization for AI-Enabled Food Search, PR 2325\n"
     printf "         Choose other desired customizations first;\n"
     printf "           and then add this one last.\n"
     printf "         Order is not independent for this customization with respect to:\n"
@@ -104,7 +104,7 @@ add_customization "Negative Insulin Damper" "negative_insulin" "message_for_nega
 
 add_customization "Increase Remote Window to 15 minutes" "remote_window" "message_for_remote_window"
 
-add_customization "Preliminary AI Food" "ai_food" "message_for_ai_food" "1"
+add_customization "Preliminary Food Search" "food_search" "message_for_food_search" "1"
 
 add_translation "2002" "profiles"
 
