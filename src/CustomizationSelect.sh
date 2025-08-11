@@ -65,15 +65,15 @@ function message_for_remote_window() {
 }
 
 function message_for_food_search() {
-    printf "       Preliminary customization for AI-Enabled Food Search, PR 2325\n"
+    printf "       Preliminary customization for AI-Enabled Food Search, PR 2329\n"
+    printf "          https://github.com/LoopKit/Loop/pull/2329\n"
     printf "         Choose other desired customizations first;\n"
     printf "           and then add this one last.\n"
     printf "         Order is not independent for this customization with respect to:\n"
     printf "           Profile Save & Load, Basal Lock and Live Activity\n"
     printf "       Ignore messages about conflicts after this is appled:\n"
     printf "         if a customization is already applied before this one,\n"
-    printf "         it remains in place after this one is added\n"
-    printf "          https://github.com/LoopKit/Loop/pull/2325\n\n"
+    printf "         it remains in place after this one is added\n\n"
 }
 
 # list patches in this order with args:
