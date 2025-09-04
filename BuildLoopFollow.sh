@@ -184,7 +184,7 @@ function erase_previous_line {
 #
 # Required: BUILD_DIR
 #    it is where the download folder will be created
-#    For example: BUILD_DIR=~/Downloads/BuildLoop
+#    For example: BUILD_DIR=~/Downloads/Build{app_name}
 #
 # Required: OVERRIDE_FILE
 #    name of the automatic signing file
@@ -363,7 +363,7 @@ CUSTOM_BRANCH=${1:-$CUSTOM_BRANCH}
 # *** Start of inlined file: inline_functions/building_verify_version.sh ***
 #This should be the latest iOS version
 #This is the highest version we expect users to have on their iPhones
-LATEST_IOS_VER="18.5.x"
+LATEST_IOS_VER="18.6.x"
 
 #This should be the lowest xcode version required to build to LATEST_IOS_VER
 LOWEST_XCODE_VER="16.1"
