@@ -280,7 +280,7 @@ function before_final_return_message() {
     echo -e "${INFO_FONT}AFTER you hit return, Xcode will open automatically${NC}"
     echo "  For new phone or new watch (never used with Xcode),"
     echo "    review Developer Mode Information:"
-    echo -e "  https://loopkit.github.io/loopdocs/build/step14/#prepare-your-phone-and-watch"
+    echo -e "  https://loopkit.github.io/loopdocs/build/build-app/#prepare-your-phone-and-watch"
     echo ""
     echo "  For phones that have Developer Mode enabled continue with these steps"
     echo "  Upper middle of Xcode:"
