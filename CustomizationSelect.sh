@@ -749,8 +749,10 @@ function message_for_negative_insulin() {
 }
 
 function message_for_remote_window() {
-    printf "       Increase the time-out for LoopCaregiver remote command OTP to 15 minutes\n"
-    printf "          https://www.loopandlearn.org/loop-features-in-development#remote-window\n\n"
+    printf "        Increase the time-out for Loop remote command One Time Password to 10 minutes\n"
+    printf "        This increased window applies to remote commands from LoopCaregiver,\n"
+    printf "          LoopFollow or from Nightscout Careportal\n"
+    printf "            https://www.loopandlearn.org/loop-features-in-development#remote-window\n\n"
 }
 
 # list patches in this order with args:
@@ -779,7 +781,7 @@ add_customization "Basal Lock" "basal_lock" "message_for_basal_lock" "1"
 add_customization "(Included in 3.10.0) Live Activity/Dynamic Island" "live_activity" "message_for_live_activity" "1" "Verify that Xcode is closed before continuing!"
 add_customization "Negative Insulin Damper" "negative_insulin" "message_for_negative_insulin"
 
-add_customization "Increase Remote Window to 15 minutes" "remote_window" "message_for_remote_window"
+add_customization "Increase Remote Window to 10 minutes" "remote_window" "message_for_remote_window"
 
 add_translation "2002" "profiles"
 
