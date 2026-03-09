@@ -753,6 +753,9 @@ function message_for_remote_window() {
     printf "        This increased window applies to remote commands from LoopCaregiver,\n"
     printf "          LoopFollow or from Nightscout Careportal\n"
     printf "            https://www.loopandlearn.org/loop-features-in-development#remote-window\n\n"
+    printf ""
+    printf "  Experimental - users can try shorter increases to the remote window of 5 or 3 minutes\n"
+    printf "                 only one option can be selected\n\n"
 }
 
 # list patches in this order with args:
@@ -782,6 +785,8 @@ add_customization "(Included in 3.10.0) Live Activity/Dynamic Island" "live_acti
 add_customization "Negative Insulin Damper" "negative_insulin" "message_for_negative_insulin"
 
 add_customization "Increase Remote Window to 10 minutes" "remote_window" "message_for_remote_window"
+add_customization "Increase Remote Window to 5 minutes" "remote_window_5"
+add_customization "Increase Remote Window to 3 minutes" "remote_window_3" "message_to_add_blank_line"
 
 add_translation "2002" "profiles"
 
