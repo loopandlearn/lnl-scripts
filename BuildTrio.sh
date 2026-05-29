@@ -828,13 +828,13 @@ function select_special_branch() {
     branch_select ${URL_THIS_SCRIPT} ${special_branch_name} ${app_name}_${special_branch_name}
 }
 
-function special_message_0.2_to_0.7() {
+function special_message_0.2_migration() {
     echo -e ""
-    echo -e "For those who were running versions of Trio starting with 0.2,"
-    echo -e "  when you build main, you will advance to version 0.7:"
-    echo -e "  As part of this, you will go through an onboarding step"
+    echo -e "For those who are running versions of Trio starting with 0.2,"
+    echo -e "  when you build main, you will advance to a much newer version:"
+    echo -e "  As part of this, you will go through an onboarding step."
     echo -e "      ${INFO_FONT} STOP NOW${NC}"
-    echo -e "Read this information first, then come back and build"
+    echo -e "Read this information first, then come back and build."
     echo -e "  https://triodocs.org/configuration/migration/trio-02x-migration/"
 }
 
@@ -860,7 +860,7 @@ if [ -z "$CUSTOM_BRANCH" ]; then
         echo -e ""
         echo -e "  ${INFO_FONT}Option 1: Trio main is recommended${NC}"
         echo -e "  ${INFO_FONT}Join Discord before using dev or building a feature branch${NC}"
-        special_message_0.2_to_0.7
+        special_message_0.2_migration
         special_message_howto_build_feature_branch
         echo -e ""
         echo -e "Before you continue, please ensure"
