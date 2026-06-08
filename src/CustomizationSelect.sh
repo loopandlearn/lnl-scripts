@@ -64,10 +64,19 @@ function message_for_remote_window() {
     printf "            https://www.loopandlearn.org/loop-features-in-development#remote-window\n\n"
 }
 
+function message_for_xdrip() {
+    printf "        Add xDrip4iOS as a CGM source for Loop using a shared App Group\n"
+    printf "        Applying this also clones the xdrip-client-swift plugin into the workspace\n"
+    printf "          https://www.loopandlearn.org/custom-code#custom-list\n\n"
+}
+
 # list patches in this order with args:
 #   User facing information for option
 #   Folder name in the patch repo
 #   (Optional) message function shown prior to option
+#   (Optional) clean_build flag ("1" to clean the build folder)
+#   (Optional) final_message shown (with a pause) before applying
+#   (Optional) submodule path to clone after the patch is applied
 
 add_customization "(Included in 3.10.0) Change Default to Upload Dexcom Readings" "dexcom_upload_readings"
 add_customization "Increase Future Carbs Limit to 4 hours" "future_carbs_4h"
@@ -91,6 +100,10 @@ add_customization "(Included in 3.10.0) Live Activity/Dynamic Island" "live_acti
 add_customization "Negative Insulin Damper" "negative_insulin" "message_for_negative_insulin"
 
 add_customization "Increase Remote Window to 10 minutes" "remote_window" "message_for_remote_window"
+
+# xdrip_cgm adds the xdrip-client-swift submodule, so the 6th arg tells the
+# script to clone it after the patch is applied
+add_customization "Add xDrip4iOS as a CGM (clones xdrip-client-swift)" "xdrip_cgm" "message_for_xdrip" "" "" "xdrip-client-swift"
 
 add_translation "2002" "profiles"
 

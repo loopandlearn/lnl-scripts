@@ -62,6 +62,7 @@ status=()
 patch=()
 clean_build=()
 final_message=()
+submodule=()
 
 function add_customization() {
     customization+=("$1")
@@ -69,6 +70,10 @@ function add_customization() {
     message_function+=("$3")
     clean_build+=("$4")
     final_message+=("$5")
+    # Optional submodule path that this customization adds to .gitmodules and
+    # therefore must be fetched (cloned) after the patch is applied so that the
+    # referenced Xcode project exists. Leave blank for source-only patches.
+    submodule+=("$6")
 }
 
 folder_translation_from=()
@@ -223,6 +228,38 @@ function display_unapplicable_patches() {
     fi
 }
 
+# Clones the submodule a customization references (reading the URL the patch
+# just added to .gitmodules) so the referenced Xcode project exists. The patch
+# itself only edits .gitmodules/workspace/scheme; the source must be fetched.
+function fetch_customization_submodule {
+    local sub_path="$1"
+    [ -z "$sub_path" ] && return 0
+    if [ -e "$sub_path/.git" ]; then
+        return 0  # already present, nothing to do
+    fi
+    local sub_url
+    sub_url=$(git config -f .gitmodules --get "submodule.${sub_path}.url" 2>/dev/null)
+    if [ -z "$sub_url" ]; then
+        echo -e "${ERROR_FONT}  Could not find URL for submodule $sub_path in .gitmodules${NC}"
+        return 1
+    fi
+    echo -e "${INFO_FONT}  Fetching $sub_path, please wait  ...  patiently  ...${NC}"
+    if git clone --quiet "$sub_url" "$sub_path"; then
+        erase_previous_line
+        return 0
+    fi
+    echo -e "${ERROR_FONT}  Failed to clone $sub_path from $sub_url${NC}"
+    return 1
+}
+
+# Removes a submodule directory that a customization added, so that reverting
+# the customization fully restores the workspace.
+function remove_customization_submodule {
+    local sub_path="$1"
+    [ -z "$sub_path" ] && return 0
+    [ -d "$sub_path" ] && rm -rf "$sub_path"
+}
+
 function apply_patch {
     local index=$1
     local patch_file="${patch[$index]}"
@@ -238,6 +275,9 @@ function apply_patch {
     
         if git apply --whitespace=nowarn "$patch_file"; then
             echo -e "${SUCCESS_FONT}  Customization $customization_name applied successfully${NC}"
+            if [ -n "${submodule[$index]}" ]; then
+                fetch_customization_submodule "${submodule[$index]}" || return_when_ready
+            fi
             if [ "${clean_build[$index]}" == "1" ]; then
                 echo -e "${INFO_FONT}  Cleaning build folder, please wait  ...  patiently  ...${NC}"
                 xcodebuild -quiet -workspace "${workingdir}/LoopWorkspace.xcworkspace" -scheme LoopWorkspace clean 2>/dev/null
@@ -261,6 +301,9 @@ function apply_patch_command_line {
     if [ -f "$patch_file" ]; then
         if git apply --whitespace=nowarn "$patch_file"; then
             echo -e "${SUCCESS_FONT}  Customization $customization_name applied successfully${NC}"
+            if [ -n "${submodule[$index]}" ]; then
+                fetch_customization_submodule "${submodule[$index]}" || exit 1
+            fi
         else
             echo -e "${ERROR_FONT}  Failed to apply customization $customization_name${NC}"
             exit 1
@@ -287,6 +330,9 @@ function revert_patch {
         
         if git apply --whitespace=nowarn --reverse "$patch_file"; then
             echo -e "${SUCCESS_FONT}  Customization $customization_name reverted successfully${NC}"
+            if [ -n "${submodule[$index]}" ]; then
+                remove_customization_submodule "${submodule[$index]}"
+            fi
             if [ "${clean_build[$index]}" == "1" ]; then
                 echo -e "${INFO_FONT}  Cleaning build folder, please wait  ...  patiently  ...${NC}"
                 xcodebuild -quiet -workspace "${workingdir}/LoopWorkspace.xcworkspace" -scheme LoopWorkspace clean 2>/dev/null
