@@ -416,6 +416,15 @@ function fetch_customization_submodule {
     fi
     echo -e "${INFO_FONT}  Fetching $sub_path, please wait  ...  patiently  ...${NC}"
     if git clone --quiet "$sub_url" "$sub_path"; then
+        # Optional ref pin: if .gitmodules specifies a branch/tag/SHA for this
+        # submodule, check it out so a customization can lock a specific version
+        # (e.g. keep dev/main on one commit while next-dev uses another).
+        local sub_ref
+        sub_ref=$(git config -f .gitmodules --get "submodule.${sub_path}.branch" 2>/dev/null)
+        if [ -n "$sub_ref" ] && ! git -C "$sub_path" checkout --quiet "$sub_ref"; then
+            echo -e "${ERROR_FONT}  Could not check out ref '$sub_ref' for $sub_path${NC}"
+            return 1
+        fi
         erase_previous_line
         return 0
     fi
