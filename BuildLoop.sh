@@ -275,7 +275,7 @@ function before_final_return_message() {
     echo -e "${INFO_FONT}AFTER you hit return, Xcode will open automatically${NC}"
     echo "  For new phone or new watch (never used with Xcode),"
     echo "    review Developer Mode Information:"
-    echo -e "  https://loopkit.github.io/loopdocs/build/step14/#prepare-your-phone-and-watch"
+    echo -e "  https://loopkit.github.io/loopdocs/build/build-app/#prepare-your-phone-and-watch"
     echo ""
     echo "  For phones that have Developer Mode enabled continue with these steps"
     echo "  Upper middle of Xcode:"
@@ -365,17 +365,17 @@ CUSTOM_BRANCH=${1:-$CUSTOM_BRANCH}
 # *** Start of inlined file: inline_functions/building_verify_version.sh ***
 #This should be the latest iOS version
 #This is the highest version we expect users to have on their iPhones
-LATEST_IOS_VER="26.4.x"
+LATEST_IOS_VER="26.5.x"
 
 #This should be the lowest xcode version required to build to LATEST_IOS_VER
-LOWEST_XCODE_VER="16.4"
+LOWEST_XCODE_VER="26.2"
 
 #This should be the latest known xcode version
 #LOWEST_XCODE_VER and LATEST_XCODE_VER will probably be equal but we should have suport for a span of these
-LATEST_XCODE_VER="26.4"
+LATEST_XCODE_VER="26.6"
 
 #This is the lowest version of macOS required to run LOWEST_XCODE_VER
-LOWEST_MACOS_VER="15.3"
+LOWEST_MACOS_VER="26.2"
 
 # The compare_versions function takes two version strings as input arguments,
 # sorts them in ascending order using the sort command with the -V flag (version sorting),
@@ -809,7 +809,11 @@ function select_dev() {
 
 # Keep this for when we need a special branch name
 # If not used, make this empty string and comment out the menu option
-special_branch_name=""
+special_branch_name="next-dev"
+
+function select_special_branch() {
+    branch_select ${URL_THIS_SCRIPT} ${special_branch_name} LoopWorkspace_${special_branch_name}
+}
 
 
 if [ -z "$CUSTOM_BRANCH" ]; then
@@ -822,10 +826,10 @@ if [ -z "$CUSTOM_BRANCH" ]; then
         echo
         echo -e "  ${INFO_FONT}Option 1: ${app_name} main branch is recommended${NC}"
         echo -e ""
-        echo -e "  If you choose dev branch, you should be prepared to build frequently"
+        echo -e "  If you choose any other branch, you should be prepared to build frequently"
         echo "    You should be following zulipchat and have read:"
         echo
-        echo "    https://loopkit.github.io/loopdocs/version/development/#whats-going-on-in-the-dev-branch"
+        echo "    https://loopkit.github.io/loopdocs/version/development/#updates-in-dev"
         echo
         echo -e "  Before you continue, please ensure"
         echo -e "    you have Xcode and Xcode command line tools installed\n"
@@ -834,12 +838,12 @@ if [ -z "$CUSTOM_BRANCH" ]; then
         options=(\
             "${app_name} main" \
             "${app_name} dev" \
-            # "${app_name} ${special_branch_name}" \
+            "${app_name} ${special_branch_name}" \
             "$(exit_or_return_menu)")
         actions=(\
             "select_main" \
             "select_dev" \
-            # "select_special_branch" \
+            "select_special_branch" \
             "exit_script")
         menu_select "${options[@]}" "${actions[@]}"
     done
