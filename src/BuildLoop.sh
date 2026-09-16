@@ -39,7 +39,11 @@ function select_dev() {
 
 # Keep this for when we need a special branch name
 # If not used, make this empty string and comment out the menu option
-special_branch_name=""
+special_branch_name="next-dev"
+
+function select_special_branch() {
+    branch_select ${URL_THIS_SCRIPT} ${special_branch_name} LoopWorkspace_${special_branch_name}
+}
 
 
 if [ -z "$CUSTOM_BRANCH" ]; then
@@ -52,10 +56,10 @@ if [ -z "$CUSTOM_BRANCH" ]; then
         echo
         echo -e "  ${INFO_FONT}Option 1: ${app_name} main branch is recommended${NC}"
         echo -e ""
-        echo -e "  If you choose dev branch, you should be prepared to build frequently"
+        echo -e "  If you choose any other branch, you should be prepared to build frequently"
         echo "    You should be following zulipchat and have read:"
         echo
-        echo "    https://loopkit.github.io/loopdocs/version/development/#whats-going-on-in-the-dev-branch"
+        echo "    https://loopkit.github.io/loopdocs/version/development/#updates-in-dev"
         echo
         echo -e "  Before you continue, please ensure"
         echo -e "    you have Xcode and Xcode command line tools installed\n"
@@ -64,12 +68,12 @@ if [ -z "$CUSTOM_BRANCH" ]; then
         options=(\
             "${app_name} main" \
             "${app_name} dev" \
-            # "${app_name} ${special_branch_name}" \
+            "${app_name} ${special_branch_name}" \
             "$(exit_or_return_menu)")
         actions=(\
             "select_main" \
             "select_dev" \
-            # "select_special_branch" \
+            "select_special_branch" \
             "exit_script")
         menu_select "${options[@]}" "${actions[@]}"
     done
