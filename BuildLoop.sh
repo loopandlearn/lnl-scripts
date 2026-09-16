@@ -275,7 +275,7 @@ function before_final_return_message() {
     echo -e "${INFO_FONT}AFTER you hit return, Xcode will open automatically${NC}"
     echo "  For new phone or new watch (never used with Xcode),"
     echo "    review Developer Mode Information:"
-    echo -e "  https://loopkit.github.io/loopdocs/build/step14/#prepare-your-phone-and-watch"
+    echo -e "  https://loopkit.github.io/loopdocs/build/build-app/#prepare-your-phone-and-watch"
     echo ""
     echo "  For phones that have Developer Mode enabled continue with these steps"
     echo "  Upper middle of Xcode:"
@@ -387,6 +387,54 @@ function compare_versions() {
     printf '%s\n%s\n' "$1" "$2" | sort -V | head -n1
 }
 
+# xcodebuild -checkFirstLaunchStatus exits nonzero when the Xcode license
+# has not been accepted or the Xcode components are not installed.
+# Either condition causes git and xcodebuild to fail, so it is verified
+# before the version check and the clone.
+function check_xcode_license() {
+    if xcodebuild -checkFirstLaunchStatus >/dev/null 2>&1; then
+        return
+    fi
+
+    echo ""
+    echo -e "❌ ${ERROR_FONT}The Xcode license has not been accepted for this Xcode version,"
+    echo -e "     or Xcode has not finished installing its components.${NC}"
+    echo -e "   This happens after Xcode is installed or updated."
+    echo -e "   The script cannot download or build until this is done."
+    echo -e "Please choose an option below to proceed:\n"
+    options=("Accept Xcode license and install components" "Skip" "$(exit_or_return_menu)")
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "Accept Xcode license and install components")
+                echo -e "You might be prompted for your password."
+                echo -e "  Use the password for logging into your Mac."
+                sudo xcodebuild -runFirstLaunch
+                if xcodebuild -checkFirstLaunchStatus >/dev/null 2>&1; then
+                    echo -e "✅ ${SUCCESS_FONT}Xcode license accepted and components installed.${NC}"
+                    return_when_ready
+                    break
+                else
+                    echo -e "❌ ${ERROR_FONT}Xcode is still not ready.${NC}"
+                    echo -e "   Open Xcode once, accept the license and let it finish installing,"
+                    echo -e "   or run this command in a terminal and then run this script again:"
+                    echo -e "     sudo xcodebuild -runFirstLaunch"
+                    exit_message
+                fi
+                ;;
+            "Skip")
+                break
+                ;;
+            "$(exit_or_return_menu)")
+                exit_script
+                ;;
+            *) # Invalid option
+                invalid_entry
+                ;;
+        esac
+    done
+}
+
 function check_versions() {
     section_divider
     echo "Verifying Xcode and macOS versions..."
@@ -395,6 +443,8 @@ function check_versions() {
         echo "  Xcode not found. Please install Xcode and try again."
         exit_or_return_menu
     fi
+
+    check_xcode_license
 
     if [ -n "$CUSTOM_XCODE_VER" ]; then
         XCODE_VER="$CUSTOM_XCODE_VER"
