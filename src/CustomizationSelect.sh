@@ -70,6 +70,12 @@ function message_for_xdrip() {
     printf "          https://www.loopandlearn.org/custom-code#custom-list\n\n"
 }
 
+function message_for_cgm_sensor_notes() {
+    printf "        Upload Dexcom G6/G7 sensor problems (sensor issue, failure, expiry,\n"
+    printf "          excess noise, calibration error) to Nightscout as Note treatments\n"
+    printf "          https://www.loopandlearn.org/custom-code#custom-list\n\n"
+}
+
 # list patches in this order with args:
 #   User facing information for option
 #   Folder name in the patch repo
@@ -100,6 +106,7 @@ add_customization "(Included in 3.10.0) Live Activity/Dynamic Island" "live_acti
 add_customization "Negative Insulin Damper" "negative_insulin" "message_for_negative_insulin"
 
 add_customization "Increase Remote Window to 10 minutes" "remote_window" "message_for_remote_window"
+add_customization "Report CGM Sensor Errors to Nightscout" "cgm_sensor_notes" "message_for_cgm_sensor_notes"
 
 # xdrip_cgm adds the xdrip-client-swift submodule, so the 6th arg tells the
 # script to clone it after the patch is applied
