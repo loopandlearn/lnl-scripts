@@ -767,7 +767,7 @@ function verify_xcode_path() {
                     xcode_path=$(mdfind -name Xcode.app 2>/dev/null)
                     if [ -z "$xcode_path" ]; then
                         echo -e "❌ ${ERROR_FONT}Xcode.app not found.${NC}"
-                        echo -e "Please use this guide to set the xcode-select path: https://loopkit.github.io/loopdocs/build/step9/#command-line-tools"
+                        echo -e "Please use this guide to set the xcode-select path: https://loopkit.github.io/loopdocs/build/updating/#missing-xcode-or-command-line-tools"
                         exit_message
                     else
                         echo -e "Using this location: $xcode_path"
@@ -776,7 +776,7 @@ function verify_xcode_path() {
                         if [ ! -d "$DEVELOPER_DIR_PATH" ]
                         then
                             echo -e "❌ ${ERROR_FONT}Developer directory not found in Xcode.app. Please ensure you have the correct version of Xcode installed..${NC}"
-                            echo -e "Please use this guide to set the xcode-select path: https://loopkit.github.io/loopdocs/build/step9/#command-line-tools"
+                            echo -e "Please use this guide to set the xcode-select path: https://loopkit.github.io/loopdocs/build/updating/#missing-xcode-or-command-line-tools"
                             exit_message
                         else
                             echo -e "You might be prompted for your password."
