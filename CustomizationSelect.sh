@@ -830,7 +830,6 @@ function message_for_cgm_sensor_notes() {
 #   (Optional) final_message shown (with a pause) before applying
 #   (Optional) submodule path to clone after the patch is applied
 
-add_customization "(Included in 3.10.0) Change Default to Upload Dexcom Readings" "dexcom_upload_readings"
 add_customization "Increase Future Carbs Limit to 4 hours" "future_carbs_4h"
 add_customization "Modify Carb Warning & Limit: Low Carb to 49 & 99" "low_carb_limit"
 add_customization "Modify Carb Warning & Limit: High Carb to 201 & 300" "high_carb_limit"
