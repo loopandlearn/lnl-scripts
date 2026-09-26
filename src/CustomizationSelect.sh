@@ -57,6 +57,12 @@ function message_for_remote_window() {
     printf "            https://www.loopandlearn.org/loop-features-in-development#remote-window\n\n"
 }
 
+function message_for_remote_carb_edit() {
+    printf "        Let LoopFollow delete or edit carb entries Loop created within the last 24 hours\n"
+    printf "        Requires the LoopFollow remote carb edit feature and LoopFollow's own APNS credentials\n"
+    printf "          https://www.loopandlearn.org/custom-code#custom-list\n\n"
+}
+
 function message_for_xdrip() {
     printf "        Add xDrip4iOS as a CGM source for Loop using a shared App Group\n"
     printf "        Applying this also clones the xdrip-client-swift plugin into the workspace\n"
@@ -96,6 +102,7 @@ add_customization "Basal Lock" "basal_lock" "message_for_basal_lock" "1"
 add_customization "Negative Insulin Damper" "negative_insulin" "message_for_negative_insulin"
 
 add_customization "Increase Remote Window to 10 minutes" "remote_window" "message_for_remote_window"
+add_customization "Remote Carb Delete and Edit from LoopFollow" "remote_carb_edit" "message_for_remote_carb_edit"
 add_customization "Report CGM Sensor Errors to Nightscout" "cgm_sensor_notes" "message_for_cgm_sensor_notes"
 
 # xdrip_cgm adds the xdrip-client-swift submodule, so the 6th arg tells the
