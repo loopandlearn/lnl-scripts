@@ -810,8 +810,8 @@ function message_for_xdrip() {
 }
 
 function message_for_cgm_sensor_notes() {
-    printf "        Upload Dexcom G6/G7 sensor problems (sensor issue, failure, expiry,\n"
-    printf "          excess noise, calibration error) to Nightscout as Note treatments\n"
+    printf "        Upload Dexcom G6/G7 sensor states without reliable glucose\n"
+    printf "          (warmup, failure, expiry, noise, ...) to Nightscout as Note treatments\n"
     printf "          https://www.loopandlearn.org/custom-code#custom-list\n\n"
 }
 
