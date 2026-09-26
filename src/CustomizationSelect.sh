@@ -90,13 +90,13 @@ add_customization "2 hour Absorption Time for Lollipop" "2hlollipop" "message_to
 
 add_customization "Display 2 Days of Meal History" "meal_days"
 add_customization "Display a Week of Meal History (Slow after Restart)" "meal_week" "message_to_add_blank_line"
+add_customization "Report CGM Sensor Errors to Nightscout" "cgm_sensor_notes" "message_for_cgm_sensor_notes"
 
 add_customization "Profile Save & Load" "profiles" "message_for_profiles"
 add_customization "Basal Lock" "basal_lock" "message_for_basal_lock" "1"
 add_customization "Negative Insulin Damper" "negative_insulin" "message_for_negative_insulin"
 
 add_customization "Increase Remote Window to 10 minutes" "remote_window" "message_for_remote_window"
-add_customization "Report CGM Sensor Errors to Nightscout" "cgm_sensor_notes" "message_for_cgm_sensor_notes"
 
 # xdrip_cgm adds the xdrip-client-swift submodule, so the 6th arg tells the
 # script to clone it after the patch is applied
