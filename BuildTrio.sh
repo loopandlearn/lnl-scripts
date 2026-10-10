@@ -913,7 +913,7 @@ function testflight_next_steps() {
     echo -e ""
     echo -e "  First time only: set up an internal TestFlight group for the app"
     echo -e "    and add yourself and anyone else who will install the app"
-    echo -e "    The steps are the same for Loop, Trio and LoopFollow:"
+    echo -e "    The steps are the same for every app:"
     echo -e "    ${URL_TESTFLIGHT_GROUP}"
     echo -e ""
     echo -e "  Install the app on the phone with the TestFlight app:"

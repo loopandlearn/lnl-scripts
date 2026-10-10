@@ -8,8 +8,10 @@
 BUILD_DIR=~/Downloads/"BuildLoop"
 OVERRIDE_FILE=LoopConfigOverride.xcconfig
 DEV_TEAM_SETTING_NAME="LOOP_DEVELOPMENT_TEAM"
+TESTFLIGHT_SCHEME="LoopCaregiver"
 
 #!inline build_functions.sh
+#!inline testflight_functions.sh
 
 
 ############################################################
@@ -56,14 +58,20 @@ standard_build_train
 
 
 ############################################################
-# Open Xcode
+# Open Xcode or upload to TestFlight
 ############################################################
 
-section_divider
-before_final_return_message
-echo -e ""
-return_when_ready
+select_xcode_or_testflight
 cd $REPO_NAME
-xed . 
+
+if [ "$TESTFLIGHT_UPLOAD" = "1" ]; then
+    upload_to_testflight
+else
+    section_divider
+    before_final_return_message
+    echo -e ""
+    return_when_ready
+    xed . 
+fi
 after_final_return_message
 exit_script
