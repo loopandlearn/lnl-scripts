@@ -6,16 +6,10 @@
 #    Xcode scheme that is archived, set by the BuildXXX script
 #    For example: TESTFLIGHT_SCHEME="LoopWorkspace"
 
-# TESTFLIGHT_UPLOAD
-#   Default is empty, which means the user chooses between Xcode and TestFlight
-#   Set to 1 to upload to TestFlight, set to 0 to open Xcode, without asking
-
 URL_TESTFLIGHT_GROUP="https://loopkit.github.io/loopdocs/browser/tf-users/#configure-testflight-group-for-the-app"
 URL_TESTFLIGHT_INSTALL="https://loopkit.github.io/loopdocs/browser/phone-install/"
 
 function select_xcode_or_testflight() {
-    if [ -n "$TESTFLIGHT_UPLOAD" ]; then return; fi
-
     section_separator
     echo -e "${INFO_FONT}Choose how to install the app${NC}"
     echo -e ""

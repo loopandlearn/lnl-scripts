@@ -198,12 +198,6 @@ With `Upload to TestFlight`, the script builds the app on your Mac and uploads i
 * The first time, set up an internal TestFlight group for the app: [*LoopDocs*: Configure TestFlight Group](https://loopkit.github.io/loopdocs/browser/tf-users/#configure-testflight-group-for-the-app). The steps are the same for *Loop*, *Trio* and *LoopFollow*.
 * Install the app on the phone: [*LoopDocs*: Install with TestFlight](https://loopkit.github.io/loopdocs/browser/phone-install/)
 
-To skip the question, set `TESTFLIGHT_UPLOAD` to `1` to always upload to TestFlight or to `0` to always open Xcode:
-
-```
-export TESTFLIGHT_UPLOAD=1
-```
-
 ## Developer Tips
 
 When these scripts are being modified and tested, the developers will be working in a feature or development (dev) branch. In addition, they can use some special flags to simplify and speed up testing.
