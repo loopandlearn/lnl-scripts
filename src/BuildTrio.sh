@@ -12,6 +12,7 @@ BUILD_DIR=~/Downloads/"Build${app_name}"
 USE_OVERRIDE_IN_REPO="0"
 OVERRIDE_FILE="ConfigOverride.xcconfig"
 DEV_TEAM_SETTING_NAME="DEVELOPER_TEAM"
+TESTFLIGHT_SCHEME="Trio"
 
 # sub modules are required
 CLONE_SUB_MODULES="1"
@@ -21,6 +22,7 @@ FLAG_USE_SHA=0  # Initialize FLAG_USE_SHA to 0
 FIXED_SHA=""    # Initialize FIXED_SHA with an empty string
 
 #!inline build_functions.sh
+#!inline testflight_functions.sh
 
 ############################################################
 # The rest of this is specific to the particular script
@@ -139,13 +141,19 @@ check_config_override_existence_offer_to_configure
 ensure_a_year
 
 ############################################################
-# Open Xcode
+# Open Xcode or upload to TestFlight
 ############################################################
 
-section_divider
-before_final_return_message
-echo -e ""
-return_when_ready
-xed . 
+select_xcode_or_testflight
+
+if [ "$TESTFLIGHT_UPLOAD" = "1" ]; then
+    upload_to_testflight
+else
+    section_divider
+    before_final_return_message
+    echo -e ""
+    return_when_ready
+    xed . 
+fi
 after_final_return_message
 exit_script

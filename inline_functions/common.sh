@@ -48,6 +48,7 @@ if [ "$0" != "_" ]; then
         "PATCH_REPO: Specifies the URL of the patch source repository."
         "LOCAL_PATCH_FOLDER: Defines a local directory for sourcing patches."
         "CUSTOMIZATION_DEBUG: Determines the verbosity of the customization debug output."
+        "TESTFLIGHT_UPLOAD: Set to 1 to upload to TestFlight or 0 to open Xcode, without asking."
     )
 
     # Flag to check if any variable is set
