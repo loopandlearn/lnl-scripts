@@ -457,8 +457,16 @@ function check_versions() {
 
     echo "  Xcode found: Version $XCODE_VER"
 
+    # A trailing .x in LATEST_XCODE_VER matches any version with that prefix,
+    # so only the leading components of XCODE_VER are compared against it
+    latest_xcode_base="${LATEST_XCODE_VER%.x}"
+    xcode_ver_base="$XCODE_VER"
+    if [ "$latest_xcode_base" != "$LATEST_XCODE_VER" ]; then
+        xcode_ver_base=$(echo "$XCODE_VER" | cut -d. -f1-"$(echo "$latest_xcode_base" | awk -F. '{print NF}')")
+    fi
+
     # Check if Xcode version is greater than the latest known version
-    if [ "$(compare_versions "$XCODE_VER" "$LATEST_XCODE_VER")" = "$LATEST_XCODE_VER" ] && [ "$XCODE_VER" != "$LATEST_XCODE_VER" ]; then
+    if [ "$(compare_versions "$xcode_ver_base" "$latest_xcode_base")" = "$latest_xcode_base" ] && [ "$xcode_ver_base" != "$latest_xcode_base" ]; then
         echo ""
         echo "You have a newer Xcode version ($XCODE_VER) than"
         echo "  the latest released version known by this script ($LATEST_XCODE_VER)."
