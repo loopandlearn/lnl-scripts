@@ -85,7 +85,7 @@ add_customization "Disable Authentication Requirement" "no_auth" "message_to_add
 add_customization "Override Insulin Needs Picker (50% to 200%, steps of 5%)" "override_sens"
 add_customization "Add now line to charts" "now_line"
 add_customization "Modify Logo to include LnL icon" "lnl_icon"
-add_customization "Remove Loop Title on Watch App" "watch_title"
+add_customization "(Not compatible with next-dev) Remove Loop Title on Watch App" "watch_title"
 add_customization "2 hour Absorption Time for Lollipop" "2hlollipop" "message_to_add_blank_line"
 
 add_customization "Display 2 Days of Meal History" "meal_days"
