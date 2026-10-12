@@ -189,7 +189,7 @@ The example below is for `BuildLoop` but the same method works for all the `Buil
 
 ## Upload to TestFlight
 
-The `BuildLoop`, `BuildTrio`, `BuildLoopFollow`, `BuildLoopCaregiver` and `BuildxDrip4iOS` scripts end with a choice between `Open Xcode` and `Upload to TestFlight`.
+The `BuildLoop`, `BuildTrio`, `BuildLoopFollow`, `BuildLoopCaregiver` and `BuildxDrip4iOS` scripts end with a choice between `Open Xcode` and `Upload to TestFlight`. The `CustomizationSelect` menu has the same two choices for *Loop* after you apply customizations.
 
 With `Upload to TestFlight`, the script builds the app on your Mac and uploads it to TestFlight. You then install the app on the phone with the TestFlight app instead of connecting the phone to the Mac. This requires a paid Apple Developer account, and TestFlight builds expire after 90 days.
 
