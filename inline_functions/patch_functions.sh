@@ -1,4 +1,5 @@
 #!inline common.sh
+#!inline testflight_functions.sh
 
 # Check if both app_name and app_folder_name are set
 if [ -z "$app_name" ] || [ -z "$app_folder_name" ]; then
@@ -21,7 +22,8 @@ REMOVE_CUSTOMIZATION_MENU_ITEM=40
 UPDATE_CUSTOMIZATION_MENU_ITEM=45
 EXIT_MENU_ITEM=50
 EXIT_OPEN_XCODE_MENU_ITEM=60
-MAX_MENU_ITEM=$EXIT_OPEN_XCODE_MENU_ITEM
+EXIT_TESTFLIGHT_MENU_ITEM=70
+MAX_MENU_ITEM=$EXIT_TESTFLIGHT_MENU_ITEM
 
 one_time_flag=0
 
@@ -393,6 +395,31 @@ function download_patches {
     fi
 }
 
+# Uploads the app in the current folder to TestFlight
+#   requires TESTFLIGHT_SCHEME, OVERRIDE_FILE and DEV_TEAM_SETTING_NAME
+function customization_upload_to_testflight() {
+    APP_NAME="${app_name}"
+    REPO_NAME="${app_folder_name}"
+    LOCAL_DIR="$(dirname "$PWD")"
+    OVERRIDE_FULLPATH="$(dirname "$LOCAL_DIR")/${OVERRIDE_FILE}"
+
+    if [ -z "$(testflight_team_id)" ]; then
+        section_separator
+        echo -e "❌ ${ERROR_FONT}No development team found for automatic signing${NC}"
+        echo -e "  Expected ${DEV_TEAM_SETTING_NAME} in:"
+        echo -e "    ${OVERRIDE_FULLPATH}"
+        echo -e "  Build ${app_name} with the Build Select Script to set up automatic signing"
+        echo -e ""
+        return_when_ready
+        return
+    fi
+
+    trap - EXIT
+    rm -rf "$mytmpdir"
+    upload_to_testflight
+    exit_script
+}
+
 function patch_menu {
     section_separator
     echo -e "${INFO_FONT}${app_name} Customization Select Script${NC}"
@@ -445,6 +472,7 @@ function patch_menu {
 
             echo "  $EXIT_MENU_ITEM) $(exit_or_return_menu)"
             echo "  $EXIT_OPEN_XCODE_MENU_ITEM) $(exit_or_return_menu) and open Xcode"
+            echo "  $EXIT_TESTFLIGHT_MENU_ITEM) $(exit_or_return_menu) and upload to TestFlight"
             echo
 
             if [ $one_time_flag -eq 0 ]; then
@@ -515,6 +543,8 @@ function patch_menu {
                     echo -e "${INFO_FONT}Starting Xcode, please wait...${NC}"
                     xed .
                     exit 0
+                elif [[ $choice -eq $EXIT_TESTFLIGHT_MENU_ITEM ]]; then
+                    customization_upload_to_testflight
                 else
                     echo -e "${ERROR_FONT}Your choice of $choice is invalid${NC}"
                     return_when_ready

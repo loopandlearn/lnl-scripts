@@ -5,6 +5,9 @@ BUILD_DIR=~/Downloads/BuildLoop
 # Customization parameters for Loop
 app_name="Loop"
 app_folder_name="LoopWorkspace"
+OVERRIDE_FILE=LoopConfigOverride.xcconfig
+DEV_TEAM_SETTING_NAME="LOOP_DEVELOPMENT_TEAM"
+TESTFLIGHT_SCHEME="LoopWorkspace"
 
 #!inline patch_functions.sh
 
