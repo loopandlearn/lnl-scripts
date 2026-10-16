@@ -10,6 +10,9 @@ BUILD_DIR=~/Downloads/BuildLoop
 # Customization parameters for Loop
 app_name="Loop"
 app_folder_name="LoopWorkspace"
+OVERRIDE_FILE=LoopConfigOverride.xcconfig
+DEV_TEAM_SETTING_NAME="LOOP_DEVELOPMENT_TEAM"
+TESTFLIGHT_SCHEME="LoopWorkspace"
 
 
 # *** Start of inlined file: inline_functions/patch_functions.sh ***
@@ -171,6 +174,197 @@ function erase_previous_line {
 # *** End of inlined file: inline_functions/common.sh ***
 
 
+# *** Start of inlined file: inline_functions/testflight_functions.sh ***
+############################################################
+# Functions to archive the app and upload it to TestFlight
+############################################################
+
+# Required: TESTFLIGHT_SCHEME
+#    Xcode scheme that is archived, set by the BuildXXX script
+#    For example: TESTFLIGHT_SCHEME="LoopWorkspace"
+
+URL_TESTFLIGHT_GROUP="https://loopkit.github.io/loopdocs/browser/tf-users/#configure-testflight-group-for-the-app"
+URL_TESTFLIGHT_INSTALL="https://loopkit.github.io/loopdocs/browser/phone-install/"
+
+function select_xcode_or_testflight() {
+    section_separator
+    echo -e "${INFO_FONT}Choose how to install the app${NC}"
+    echo -e ""
+    echo -e "  Open Xcode:"
+    echo -e "    Build in Xcode and install on a phone connected to this computer"
+    echo -e ""
+    echo -e "  Upload to TestFlight:"
+    echo -e "    The script builds the app and uploads it to TestFlight"
+    echo -e "    You install the app on the phone with the TestFlight app"
+    echo -e "    Requires a paid Apple Developer account"
+    echo -e "    TestFlight builds expire after 90 days"
+    echo -e ""
+    options=("Open Xcode" "Upload to TestFlight" "$(exit_or_return_menu)")
+    actions=("TESTFLIGHT_UPLOAD=0" "TESTFLIGHT_UPLOAD=1" "exit_script")
+    menu_select "${options[@]}" "${actions[@]}"
+}
+
+function testflight_team_id() {
+    if [ -f "${OVERRIDE_FULLPATH}" ]; then
+        grep "^$DEV_TEAM_SETTING_NAME" "${OVERRIDE_FULLPATH}" | tail -1 | awk -F= '{gsub(/[ \t]/, "", $2); print $2}'
+    fi
+}
+
+function create_testflight_export_options() {
+    local plist_file=$1
+    local team_id=$(testflight_team_id)
+
+    cat > "$plist_file" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>method</key>
+    <string>app-store-connect</string>
+    <key>destination</key>
+    <string>upload</string>
+    <key>signingStyle</key>
+    <string>automatic</string>
+    <key>testFlightInternalTestingOnly</key>
+    <true/>
+    <key>manageAppVersionAndBuildNumber</key>
+    <true/>
+EOF
+    if [ -n "$team_id" ]; then
+        echo "    <key>teamID</key>" >> "$plist_file"
+        echo "    <string>${team_id}</string>" >> "$plist_file"
+    fi
+    echo "</dict>" >> "$plist_file"
+    echo "</plist>" >> "$plist_file"
+}
+
+function testflight_next_steps() {
+    echo -e "  Apple processes the build before it shows up in TestFlight"
+    echo -e "    This usually takes 5 to 30 minutes"
+    echo -e ""
+    echo -e "  First time only: set up an internal TestFlight group for the app"
+    echo -e "    and add yourself and anyone else who will install the app"
+    echo -e "    The steps are the same for every app:"
+    echo -e "    ${URL_TESTFLIGHT_GROUP}"
+    echo -e ""
+    echo -e "  Install the app on the phone with the TestFlight app:"
+    echo -e "    ${URL_TESTFLIGHT_INSTALL}"
+}
+
+function testflight_missing_app_instructions() {
+    echo -e "${INFO_FONT}The app is not yet registered in App Store Connect${NC}"
+    echo -e "  This is expected the first time you upload this app"
+    echo -e "  The archive opens in the Xcode Organizer when you hit return"
+    echo -e ""
+    echo -e "  In the Organizer:"
+    echo -e "    1. Select the newest archive and click Distribute App"
+    echo -e "    2. Choose TestFlight Internal Only and click Distribute"
+    echo -e "    3. Xcode offers to create an app record for you"
+    echo -e "       The Name must be unique in the whole App Store"
+    echo -e "       Add something to make it unique, for example: ${APP_NAME}-$(testflight_team_id)"
+    echo -e "    4. Keep the other values and click Next until the upload starts"
+    echo -e ""
+    echo -e "  Future uploads from this script will not need this step"
+}
+
+function upload_to_testflight() {
+    local workspace=$(ls -d *.xcworkspace 2>/dev/null | head -1)
+    local testflight_dir="${LOCAL_DIR}/TestFlight"
+    local archive_path="${testflight_dir}/${REPO_NAME}.xcarchive"
+    local export_options="${testflight_dir}/ExportOptions.plist"
+    local archive_log="${testflight_dir}/archive.log"
+    local upload_log="${testflight_dir}/upload.log"
+
+    section_separator
+    if [ -z "$workspace" ]; then
+        echo -e "❌ ${ERROR_FONT}No Xcode workspace found in $(pwd)${NC}"
+        exit_message
+    fi
+
+    mkdir -p "${testflight_dir}"
+    create_testflight_export_options "${export_options}"
+
+    echo -e "${INFO_FONT}Building the app for TestFlight${NC}"
+    echo -e "  This usually takes 10 to 30 minutes"
+    echo -e "  The full build log is saved to:"
+    echo -e "    ${archive_log}"
+    echo -e ""
+    xcodebuild archive \
+        -workspace "${workspace}" \
+        -scheme "${TESTFLIGHT_SCHEME}" \
+        -configuration Release \
+        -destination "generic/platform=iOS" \
+        -archivePath "${archive_path}" \
+        -allowProvisioningUpdates \
+        > "${archive_log}" 2>&1
+    if [ $? -ne 0 ]; then
+        echo -e "❌ ${ERROR_FONT}The build failed${NC}"
+        echo -e ""
+        grep -E "error:" "${archive_log}" | sort -u | head -20
+        echo -e ""
+        echo -e "  The full build log is saved to:"
+        echo -e "    ${archive_log}"
+        exit_message
+    fi
+    echo -e "✅ ${SUCCESS_FONT}Build succeeded${NC}"
+    echo -e ""
+
+    echo -e "${INFO_FONT}Uploading the app to App Store Connect${NC}"
+    echo -e ""
+    xcodebuild -exportArchive \
+        -archivePath "${archive_path}" \
+        -exportOptionsPlist "${export_options}" \
+        -exportPath "${testflight_dir}/export" \
+        -allowProvisioningUpdates \
+        > "${upload_log}" 2>&1
+    if [ $? -eq 0 ]; then
+        echo -e "✅ ${SUCCESS_FONT}Upload succeeded${NC}"
+        echo -e ""
+        testflight_next_steps
+        return
+    fi
+
+    local distribution_logs=$(grep -o 'Created bundle at path "[^"]*"' "${upload_log}" | tail -1 | sed 's/.*"\(.*\)"/\1/')
+    if [ -n "$distribution_logs" ] && \
+        grep -qs "missingApp" "${distribution_logs}"/IDEDistribution*.log; then
+        testflight_missing_app_instructions
+        return_when_ready
+        open "${archive_path}"
+        echo -e ""
+        echo -e "When the upload in the Organizer has finished:"
+        echo -e ""
+        testflight_next_steps
+        return
+    fi
+
+    echo -e "❌ ${ERROR_FONT}The upload failed${NC}"
+    echo -e ""
+    grep -E "error:" "${upload_log}" | sort -u | head -20
+    echo -e ""
+    echo -e "  Common causes:"
+    echo -e "    - An agreement is waiting to be accepted in App Store Connect"
+    echo -e "      https://appstoreconnect.apple.com/business"
+    echo -e "    - Your Apple ID is not signed in to Xcode (Xcode Settings, Accounts)"
+    echo -e ""
+    echo -e "  The full upload log is saved to:"
+    echo -e "    ${upload_log}"
+    echo -e ""
+    echo -e "  You can also upload the archive from the Xcode Organizer,"
+    echo -e "    which often shows a more detailed error message"
+    echo -e "    Select the newest archive, click Distribute App"
+    echo -e "    and choose TestFlight Internal Only"
+    echo -e ""
+    echo -e "The archive opens in the Xcode Organizer when you hit return"
+    return_when_ready
+    open "${archive_path}"
+}
+
+############################################################
+# End of TestFlight functions
+############################################################
+# *** End of inlined file: inline_functions/testflight_functions.sh ***
+
+
 # Check if both app_name and app_folder_name are set
 if [ -z "$app_name" ] || [ -z "$app_folder_name" ]; then
     echo "Error: Both app_name and app_folder_name need to be set."
@@ -192,7 +386,8 @@ REMOVE_CUSTOMIZATION_MENU_ITEM=40
 UPDATE_CUSTOMIZATION_MENU_ITEM=45
 EXIT_MENU_ITEM=50
 EXIT_OPEN_XCODE_MENU_ITEM=60
-MAX_MENU_ITEM=$EXIT_OPEN_XCODE_MENU_ITEM
+EXIT_TESTFLIGHT_MENU_ITEM=70
+MAX_MENU_ITEM=$EXIT_TESTFLIGHT_MENU_ITEM
 
 one_time_flag=0
 
@@ -564,6 +759,31 @@ function download_patches {
     fi
 }
 
+# Uploads the app in the current folder to TestFlight
+#   requires TESTFLIGHT_SCHEME, OVERRIDE_FILE and DEV_TEAM_SETTING_NAME
+function customization_upload_to_testflight() {
+    APP_NAME="${app_name}"
+    REPO_NAME="${app_folder_name}"
+    LOCAL_DIR="$(dirname "$PWD")"
+    OVERRIDE_FULLPATH="$(dirname "$LOCAL_DIR")/${OVERRIDE_FILE}"
+
+    if [ -z "$(testflight_team_id)" ]; then
+        section_separator
+        echo -e "❌ ${ERROR_FONT}No development team found for automatic signing${NC}"
+        echo -e "  Expected ${DEV_TEAM_SETTING_NAME} in:"
+        echo -e "    ${OVERRIDE_FULLPATH}"
+        echo -e "  Build ${app_name} with the Build Select Script to set up automatic signing"
+        echo -e ""
+        return_when_ready
+        return
+    fi
+
+    trap - EXIT
+    rm -rf "$mytmpdir"
+    upload_to_testflight
+    exit_script
+}
+
 function patch_menu {
     section_separator
     echo -e "${INFO_FONT}${app_name} Customization Select Script${NC}"
@@ -616,6 +836,7 @@ function patch_menu {
 
             echo "  $EXIT_MENU_ITEM) $(exit_or_return_menu)"
             echo "  $EXIT_OPEN_XCODE_MENU_ITEM) $(exit_or_return_menu) and open Xcode"
+            echo "  $EXIT_TESTFLIGHT_MENU_ITEM) $(exit_or_return_menu) and upload to TestFlight"
             echo
 
             if [ $one_time_flag -eq 0 ]; then
@@ -686,6 +907,8 @@ function patch_menu {
                     echo -e "${INFO_FONT}Starting Xcode, please wait...${NC}"
                     xed .
                     exit 0
+                elif [[ $choice -eq $EXIT_TESTFLIGHT_MENU_ITEM ]]; then
+                    customization_upload_to_testflight
                 else
                     echo -e "${ERROR_FONT}Your choice of $choice is invalid${NC}"
                     return_when_ready
@@ -816,8 +1039,8 @@ function message_for_xdrip() {
 }
 
 function message_for_cgm_sensor_notes() {
-    printf "        Upload Dexcom G6/G7 sensor problems (sensor issue, failure, expiry,\n"
-    printf "          excess noise, calibration error) to Nightscout as Note treatments\n"
+    printf "        Upload Dexcom G6/G7 sensor states without reliable glucose\n"
+    printf "          (warmup, failure, expiry, noise, ...) to Nightscout as Note treatments\n"
     printf "          https://www.loopandlearn.org/custom-code#custom-list\n\n"
 }
 
@@ -837,11 +1060,12 @@ add_customization "Disable Authentication Requirement" "no_auth" "message_to_add
 add_customization "Override Insulin Needs Picker (50% to 200%, steps of 5%)" "override_sens"
 add_customization "Add now line to charts" "now_line"
 add_customization "Modify Logo to include LnL icon" "lnl_icon"
-add_customization "Remove Loop Title on Watch App" "watch_title"
+add_customization "(Not compatible with next-dev) Remove Loop Title on Watch App" "watch_title"
 add_customization "2 hour Absorption Time for Lollipop" "2hlollipop" "message_to_add_blank_line"
 
 add_customization "Display 2 Days of Meal History" "meal_days"
 add_customization "Display a Week of Meal History (Slow after Restart)" "meal_week" "message_to_add_blank_line"
+add_customization "(Included in next-dev) Report CGM Sensor Status to Nightscout" "cgm_sensor_notes" "message_for_cgm_sensor_notes"
 
 add_customization "Profile Save & Load" "profiles" "message_for_profiles"
 add_customization "Basal Lock" "basal_lock" "message_for_basal_lock" "1"
@@ -849,7 +1073,6 @@ add_customization "Negative Insulin Damper" "negative_insulin" "message_for_nega
 
 add_customization "Increase Remote Window to 10 minutes" "remote_window" "message_for_remote_window"
 add_customization "Remote Carb Delete and Edit from LoopFollow" "remote_carb_edit" "message_for_remote_carb_edit"
-add_customization "Report CGM Sensor Errors to Nightscout" "cgm_sensor_notes" "message_for_cgm_sensor_notes"
 
 # xdrip_cgm adds the xdrip-client-swift submodule, so the 6th arg tells the
 # script to clone it after the patch is applied

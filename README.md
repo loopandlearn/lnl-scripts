@@ -10,6 +10,7 @@ The code that these scripts help you download, build or modify is provided as op
 * [*Trio* Users](#trio-users)
 * [Individual Scripts](#individual-scripts)
 * [Build a Custom Branch](#build-a-custom-branch)
+* [Upload to TestFlight](#upload-to-testflight)
 * [Developer Tips](#developer-tips)
 * [Other Apps?](#other-apps)
 
@@ -185,6 +186,17 @@ The example below is for `BuildLoop` but the same method works for all the `Buil
 /bin/bash -c "$(curl -fsSL \
   https://raw.githubusercontent.com/loopandlearn/lnl-scripts/main/BuildLoop.sh)" - put_desired_branch_name_here
 ```
+
+## Upload to TestFlight
+
+The `BuildLoop`, `BuildTrio`, `BuildLoopFollow`, `BuildLoopCaregiver` and `BuildxDrip4iOS` scripts end with a choice between `Open Xcode` and `Upload to TestFlight`. The `CustomizationSelect` menu has the same two choices for *Loop* after you apply customizations.
+
+With `Upload to TestFlight`, the script builds the app on your Mac and uploads it to TestFlight. You then install the app on the phone with the TestFlight app instead of connecting the phone to the Mac. This requires a paid Apple Developer account, and TestFlight builds expire after 90 days.
+
+* The first time you upload an app that is not yet in App Store Connect, the script opens the build in the Xcode Organizer and explains how to let Xcode create the app record and finish the upload. If you already build the app with GitHub Browser Build, the app record exists and this step is skipped.
+* Xcode sets the build number, so builds from the script and from GitHub Browser Build can be used for the same app.
+* The first time, set up an internal TestFlight group for the app: [*LoopDocs*: Configure TestFlight Group](https://loopkit.github.io/loopdocs/browser/tf-users/#configure-testflight-group-for-the-app). The steps are the same for every app.
+* Install the app on the phone: [*LoopDocs*: Install with TestFlight](https://loopkit.github.io/loopdocs/browser/phone-install/)
 
 ## Developer Tips
 

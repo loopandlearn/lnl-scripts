@@ -9,9 +9,11 @@ BUILD_DIR=~/Downloads/BuildLoopFollow
 OVERRIDE_FILE=LoopFollowConfigOverride.xcconfig
 DEV_TEAM_SETTING_NAME="LF_DEVELOPMENT_TEAM"
 CLONE_SUB_MODULES="0"
+TESTFLIGHT_SCHEME="LoopFollow"
 
 #!inline build_functions.sh
 #!inline loopfollow_functions.sh
+#!inline testflight_functions.sh
 
 ############################################################
 # The rest of this is specific to the particular script
@@ -84,14 +86,20 @@ loop_follow_display_name_config_override
 
 
 ############################################################
-# Open Xcode
+# Open Xcode or upload to TestFlight
 ############################################################
 
-section_divider
-before_final_return_message
-echo -e ""
-return_when_ready
+select_xcode_or_testflight
 cd $REPO_NAME
-xed . 
+
+if [ "$TESTFLIGHT_UPLOAD" = "1" ]; then
+    upload_to_testflight
+else
+    section_divider
+    before_final_return_message
+    echo -e ""
+    return_when_ready
+    xed . 
+fi
 after_final_return_message
 exit_script

@@ -8,6 +8,7 @@
 BUILD_DIR=~/Downloads/BuildxDrip4iOS
 OVERRIDE_FILE=xDripConfigOverride.xcconfig
 DEV_TEAM_SETTING_NAME="XDRIP_DEVELOPMENT_TEAM"
+TESTFLIGHT_SCHEME="xdrip"
 
 # value of 2 adds additional line to Override file in repo
 USE_OVERRIDE_IN_REPO="2"
@@ -18,6 +19,7 @@ ADDED_LINE_FOR_OVERRIDE=("MAIN_APP_DISPLAY_NAME=xDrip4iO5" \
 CLONE_SUB_MODULES="0"
 
 #!inline build_functions.sh
+#!inline testflight_functions.sh
 
 
 ############################################################
@@ -60,14 +62,20 @@ fi
 standard_build_train
 
 ############################################################
-# Open Xcode
+# Open Xcode or upload to TestFlight
 ############################################################
 
-section_divider
-before_final_return_message
-echo -e ""
-return_when_ready
+select_xcode_or_testflight
 cd $REPO_NAME
-xed . 
+
+if [ "$TESTFLIGHT_UPLOAD" = "1" ]; then
+    upload_to_testflight
+else
+    section_divider
+    before_final_return_message
+    echo -e ""
+    return_when_ready
+    xed . 
+fi
 after_final_return_message
 exit_script

@@ -5,6 +5,9 @@ BUILD_DIR=~/Downloads/BuildLoop
 # Customization parameters for Loop
 app_name="Loop"
 app_folder_name="LoopWorkspace"
+OVERRIDE_FILE=LoopConfigOverride.xcconfig
+DEV_TEAM_SETTING_NAME="LOOP_DEVELOPMENT_TEAM"
+TESTFLIGHT_SCHEME="LoopWorkspace"
 
 #!inline patch_functions.sh
 
@@ -70,8 +73,8 @@ function message_for_xdrip() {
 }
 
 function message_for_cgm_sensor_notes() {
-    printf "        Upload Dexcom G6/G7 sensor problems (sensor issue, failure, expiry,\n"
-    printf "          excess noise, calibration error) to Nightscout as Note treatments\n"
+    printf "        Upload Dexcom G6/G7 sensor states without reliable glucose\n"
+    printf "          (warmup, failure, expiry, noise, ...) to Nightscout as Note treatments\n"
     printf "          https://www.loopandlearn.org/custom-code#custom-list\n\n"
 }
 
@@ -91,11 +94,12 @@ add_customization "Disable Authentication Requirement" "no_auth" "message_to_add
 add_customization "Override Insulin Needs Picker (50% to 200%, steps of 5%)" "override_sens"
 add_customization "Add now line to charts" "now_line"
 add_customization "Modify Logo to include LnL icon" "lnl_icon"
-add_customization "Remove Loop Title on Watch App" "watch_title"
+add_customization "(Not compatible with next-dev) Remove Loop Title on Watch App" "watch_title"
 add_customization "2 hour Absorption Time for Lollipop" "2hlollipop" "message_to_add_blank_line"
 
 add_customization "Display 2 Days of Meal History" "meal_days"
 add_customization "Display a Week of Meal History (Slow after Restart)" "meal_week" "message_to_add_blank_line"
+add_customization "(Included in next-dev) Report CGM Sensor Status to Nightscout" "cgm_sensor_notes" "message_for_cgm_sensor_notes"
 
 add_customization "Profile Save & Load" "profiles" "message_for_profiles"
 add_customization "Basal Lock" "basal_lock" "message_for_basal_lock" "1"
@@ -103,7 +107,6 @@ add_customization "Negative Insulin Damper" "negative_insulin" "message_for_nega
 
 add_customization "Increase Remote Window to 10 minutes" "remote_window" "message_for_remote_window"
 add_customization "Remote Carb Delete and Edit from LoopFollow" "remote_carb_edit" "message_for_remote_carb_edit"
-add_customization "Report CGM Sensor Errors to Nightscout" "cgm_sensor_notes" "message_for_cgm_sensor_notes"
 
 # xdrip_cgm adds the xdrip-client-swift submodule, so the 6th arg tells the
 # script to clone it after the patch is applied
