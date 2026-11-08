@@ -1057,7 +1057,7 @@ add_customization "Modify Carb Warning & Limit: Low Carb to 49 & 99" "low_carb_l
 add_customization "Modify Carb Warning & Limit: High Carb to 201 & 300" "high_carb_limit"
 add_customization "Disable Authentication Requirement" "no_auth" "message_to_add_blank_line"
 
-add_customization "Override Insulin Needs Picker (50% to 200%, steps of 5%)" "override_sens"
+add_customization "(Not needed with next-dev) Override Insulin Needs Picker (50% to 200%, steps of 5%)" "override_sens"
 add_customization "(Included in next-dev) Add now line to charts" "now_line"
 add_customization "(Not compatible with next-dev) Modify Logo to include LnL icon" "lnl_icon"
 add_customization "(Not compatible with next-dev) Remove Loop Title on Watch App" "watch_title"
