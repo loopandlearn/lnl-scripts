@@ -1063,7 +1063,7 @@ add_customization "(Not compatible with next-dev) Modify Logo to include LnL ico
 add_customization "(Not compatible with next-dev) Remove Loop Title on Watch App" "watch_title"
 add_customization "2 hour Absorption Time for Lollipop" "2hlollipop" "message_to_add_blank_line"
 
-add_customization "Display 2 Days of Meal History" "meal_days"
+add_customization "(Included in next-dev) Display 2 Days of Meal History" "meal_days"
 add_customization "Display a Week of Meal History (Slow after Restart)" "meal_week" "message_to_add_blank_line"
 add_customization "(Included in next-dev) Report CGM Sensor Status to Nightscout" "cgm_sensor_notes" "message_for_cgm_sensor_notes"
 
