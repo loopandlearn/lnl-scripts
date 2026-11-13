@@ -1052,7 +1052,7 @@ function message_for_cgm_sensor_notes() {
 #   (Optional) final_message shown (with a pause) before applying
 #   (Optional) submodule path to clone after the patch is applied
 
-add_customization "Increase Future Carbs Limit to 4 hours" "future_carbs_4h"
+add_customization "(Included in next-dev) Increase Future Carbs Limit to 4 hours" "future_carbs_4h"
 add_customization "Modify Carb Warning & Limit: Low Carb to 49 & 99" "low_carb_limit"
 add_customization "Modify Carb Warning & Limit: High Carb to 201 & 300" "high_carb_limit"
 add_customization "Disable Authentication Requirement" "no_auth" "message_to_add_blank_line"
